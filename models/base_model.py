@@ -11,11 +11,19 @@ class BaseModel():
 
     def __init__(self, *args, **kwargs):
         """ Initialize attributes """
-        self.name = "Temp"
-        self.my_number = 98
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        if kwargs:
+            for key, value in kwargs.items():
+                if key == 'created_at' or key == 'updated_at':
+                    fmt = '%Y-%m-%dT%H:%M:%S.%f'
+                    kwargs[key] = datetime.strptime(value, fmt)
+                if key != '__class__':
+                    setattr(self, key, value)
+        else:
+            self.name = "Temp"
+            self.my_number = 98
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
 
     def __str__(self):
         """ Printable string representation """
