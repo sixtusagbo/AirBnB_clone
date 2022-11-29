@@ -3,6 +3,8 @@
 import unittest
 from models.base_model import BaseModel
 from datetime import datetime
+from models import storage
+from models.engine.file_storage import FileStorage
 
 
 class TestBaseModel(unittest.TestCase):
@@ -48,3 +50,17 @@ class TestBaseModel(unittest.TestCase):
                          my_model_dict['created_at'])
         self.assertEqual(self.my_model.updated_at.strftime(datetime_fmt),
                          my_model_dict['updated_at'])
+
+    def test_base_model_save(self):
+        """ BaseModel save function serializes to file storage """
+        self.my_model.name = "BaseModel object"
+        self.my_model.save()
+        dict_ = self.my_model.to_dict()
+        all_objs = storage.all()
+        self.my_model.save()
+        key = "{}.{}".format(dict_['__class__'], dict_['id'])
+        self.assertTrue(key in all_objs)
+
+        self.my_model.save()
+        with self.assertRaises(TypeError):
+            BaseModel.save(self, 6)
