@@ -21,6 +21,17 @@ class HBNBCommand(cmd.Cmd):
                  'Review']
     l_commands = ['create', 'show', 'update', 'destroy', 'all']
 
+    def precmd(self, arg):
+        """parses command input"""
+        if '.' in arg and '(' in arg and ')' in arg:
+            class_ = arg.split('.')
+            command = class_[1].split('(')
+            args = command[1].split(')')
+            if (class_[0] in HBNBCommand.l_classes and
+                    command[0] in HBNBCommand.l_commands):
+                arg = command[0] + ' ' + class_[0] + ' ' + args[0]
+        return arg
+
     def do_create(self, model):
         """ Creates an instance according to a given class """
         if not model:
@@ -133,6 +144,9 @@ class HBNBCommand(cmd.Cmd):
                     if ob_name == args[0]:
                         list_instances += [str(value)]
             print(list_instances)
+
+    def postloop(self):
+        print('GoodBye!')
 
     def emptyline(self):
         pass
