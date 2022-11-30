@@ -19,7 +19,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
     l_classes = ['BaseModel', 'User', 'State', 'City', 'Amenity', 'Place',
                  'Review']
-    l_commands = ['create', 'show', 'update', 'destroy', 'all']
+    l_commands = ['create', 'show', 'update', 'destroy', 'all', 'count']
 
     def precmd(self, arg):
         """parses command input"""
@@ -144,6 +144,16 @@ class HBNBCommand(cmd.Cmd):
                     if ob_name == args[0]:
                         list_instances += [str(value)]
             print(list_instances)
+
+    def do_count(self, class_name):
+        """counts number of instances of a class"""
+        count = 0
+        all_objs = storage.all()
+        for k, v in all_objs.items():
+            cls = k.split('.')
+            if cls[0] == class_name:
+                count = count + 1
+        print(count)
 
     def postloop(self):
         print('GoodBye!')
