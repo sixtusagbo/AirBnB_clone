@@ -39,9 +39,10 @@ class FileStorage():
         otherwise, do nothing.
         """
         from models.base_model import BaseModel
-        dict_ = {"BaseModel": BaseModel}
+        from models.user import User
+        dict_models = {"BaseModel": BaseModel, "User": User}
 
         if os.path.exists(FileStorage.__file_path):
             with open(FileStorage.__file_path, 'r') as file:
                 for value in json.load(file).values():
-                    self.new(dict_[value['__class__']](**value))
+                    self.new(dict_models[value['__class__']](**value))
