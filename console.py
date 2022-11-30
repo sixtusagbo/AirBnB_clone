@@ -6,13 +6,19 @@ import cmd
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 import shlex
 
 
 class HBNBCommand(cmd.Cmd):
     """ entry point for command interpreter """
     prompt = '(hbnb) '
-    l_classes = ['BaseModel', 'User']
+    l_classes = ['BaseModel', 'User', 'State', 'City', 'Amenity', 'Place',
+                 'Review']
     l_commands = ['create', 'show', 'update', 'destroy', 'all']
 
     def do_create(self, model):
@@ -22,7 +28,9 @@ class HBNBCommand(cmd.Cmd):
         elif model not in HBNBCommand.l_classes:
             print("** class doesn't exist **")
         else:
-            dict_models = {'BaseModel': BaseModel, 'User': User}
+            dict_models = {"BaseModel": BaseModel, "User": User, "State":
+                           State, "City": City, "Amenity": Amenity, "Place":
+                           Place, "Review": Review}
             new_model = dict_models[model]()
             new_model.save()
             print(new_model.id)

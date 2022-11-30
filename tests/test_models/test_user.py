@@ -8,11 +8,11 @@ import datetime
 
 
 class UserCase(unittest.TestCase):
-    """Tests instances and methods from user class"""
+    """Test Suite for User class"""
 
     def setUp(self):
         """ Before any test """
-        u = User()
+        self.u = User()
 
     def test_class_exists(self):
         """tests if class exists"""
