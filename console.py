@@ -12,6 +12,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 import shlex
+import json
 
 
 class HBNBCommand(cmd.Cmd):
