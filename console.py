@@ -101,11 +101,17 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        a = ""
-        for argument in arg.split(','):
-            a = a + argument
-
-        args = shlex.split(a)
+        initial_split = arg.split(',', maxsplit=1)
+        if ('{' in initial_split[1] and '}' in initial_split[1] and
+            type(eval(initial_split[1])) is dict):
+            args = initial_split[0].split()
+            i_string = json.dumps(eval(initial_split[1]))
+            args += [json.loads(i_string)]
+        else:
+            a = "" # string for shlex
+            for argument in arg.split(','):
+                a = a + argument
+            args = shlex.split(a)
 
         if args[0] not in HBNBCommand.l_classes:
             print("** class doesn't exist **")
@@ -117,7 +123,12 @@ class HBNBCommand(cmd.Cmd):
                 obj_name = obj.__class__.__name__
                 obj_id = obj.id
                 if obj_name == args[0] and obj_id == args[1].strip('"'):
-                    if len(args) == 2:
+                    # determine if am updating from dictionary
+                    if type(args[2]) is dict:
+                        for key, value in args[2].items():
+                            setattr(obj, key, value)
+                        storage.save()
+                    elif len(args) == 2:
                         print("** attribute name missing **")
                     elif len(args) == 3:
                         print("** value missing **")
