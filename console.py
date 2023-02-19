@@ -13,6 +13,7 @@ from models.place import Place
 from models.review import Review
 import shlex
 import json
+import os
 
 
 class HBNBCommand(cmd.Cmd):
@@ -102,7 +103,8 @@ class HBNBCommand(cmd.Cmd):
             return
 
         initial_split = arg.split(',', maxsplit=1)
-        if ('{' in initial_split[1] and '}' in initial_split[1] and
+        if (len(initial_split) > 1 and '{' in initial_split[1] and
+            '}' in initial_split[1] and
             type(eval(initial_split[1])) is dict):
             args = initial_split[0].split()
             i_string = json.dumps(eval(initial_split[1]))
@@ -166,6 +168,10 @@ class HBNBCommand(cmd.Cmd):
             if cls[0] == class_name:
                 count = count + 1
         print(count)
+
+    def do_shell(self, command):
+        """ shell access """
+        os.system(command)
 
     def postloop(self):
         print('GoodBye!')
